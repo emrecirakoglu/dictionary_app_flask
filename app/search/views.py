@@ -38,5 +38,3 @@ def search_from_api():
 
   flash(data, 'info')
   return redirect(url_for('search.index'))
-
-
