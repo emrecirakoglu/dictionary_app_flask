@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  {% block head %}
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+  <script src="../static/js/jquery-3.6.0.min.js"></script>
+  <script src="../static/js/bootstrap.min.js"></script>
+  <title>{% block title %}{% endblock %} - Dictionary App</title>
+  {% endblock %}
+
+</head>
+
+<body>
+  <div class="header bg-secondary">
+    <div class="fs-4 container fw-bold text-center">DICTIONARY APP</div>
+  </div>
+
+  <div class="container content">
+    {% block content %}
+    {% endblock content %}
+  </div>
+
+</body>
+
+</html>

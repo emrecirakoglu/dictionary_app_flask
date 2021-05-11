@@ -1,0 +1,75 @@
+{% extends "private_base.html" %}
+{% block title %}{{title}}{% endblock %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% block content %}
+
+<form action="/search/api" method="post">
+  <div class="form-floating mb-3">
+    <input type="text" class="form-control" id="floatingInput" placeholder="Search" name="word" required>
+    <label for="floatingInput">Search for definition</label>
+  </div>
+  <button class="btn btn-primary mb-3" type="submit">Search</button>
+</form>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% set category, message = messages[0] %}
+{% if category == "error" %}
+<div class="alert alert-danger" role="alert">
+  {{ message }}
+</div>
+{% else %}
+{% set data = message %}
+<div class="card border-success mb-3" style="max-width: 100%;">
+  <div class="card-header d-flex justify-content-between align-center">
+    <span class="fw-bold fs-4">Word: {{ data.word }}</span>
+    <button type="button" id="btn_fav" class="btn btn-sm btn-outline-success">Add to Favorite</button>
+  </div>
+
+  <div class="card-body">
+    <h5 class="card-title">
+      <span class="fw-bold d-block">Definitions:</span>
+    </h5>
+    <div class="card-body">
+      <ul>
+        {% for definition in data.definitions %}
+        <li>{{ definition }}</li>
+        {% endfor %}
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function () {
+    let data = JSON.stringify('{{ data|tojson }}');
+    if (data) {
+      let btn_fav = document.getElementById("btn_fav");
+      btn_fav.addEventListener("click", (e) => {
+        $.ajax({
+          type: "POST",
+          url: "/word/add",
+          data: data,
+          contentType: "application/json;charset=UTF-8",
+          success: (response) => {
+            let responseMessage = response.message;
+            alertify.success(responseMessage);
+          },
+          error: (err) => {
+            let responseMessage = err.responseJSON.message;
+            alertify.warning(responseMessage);
+          }
+        });
+      });
+    }
+  });
+</script>
+
+{% endif%}
+{% endif %}
+{% endwith %}
+
+{% endblock %}

@@ -1,0 +1,19 @@
+.header {
+  height: 72px;
+  width: 100%;
+  color: white;
+  display: flex;
+  align-items: center;
+}
+
+.content {
+  padding-top: .75rem;
+  height: calc(100vh - 80px);
+}
+
+.menu-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}

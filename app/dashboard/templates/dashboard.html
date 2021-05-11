@@ -1,0 +1,51 @@
+{% extends "private_base.html" %}
+{% block title %}{{title}}{% endblock %}
+{% block head %}
+{{ super() }}
+<!-- <script src="{{url_for('.static', filename='login.js')}}"></script>
+<link rel="stylesheet" href="{{url_for('.static', filename='auth.css')}}"> -->
+{% endblock %}
+
+{% block content %}
+
+{% if current_user %}
+
+<div class="alert alert-primary" role="alert">
+  Welcome {{current_user}}!
+  <span class="d-block">You have {{words | length }} words</span>
+</div>
+{% endif %}
+
+<div class="d-flex flex-wrap gap-3">
+  {% if words %}
+  {% for word in words %}
+  <div class="card border-info" style="width: 24rem; cursor: pointer;"
+    data-toggle="popover"
+    data-toggle="tooltip"
+    title="Definitions"
+    data-bs-html="true"
+    data-bs-content="{% for definition in word.definitions %} ** {{definition }} <br /> {% endfor %}"
+  >
+    <div class="card-body d-flex justify-content-between align-content-center">
+      {% set power_of_word = word.practising_point + word.searched_count + word.appeared_count %}
+      <span >{{word.name}}</span> <span class="badge bg-warning text-dark">Power {{ power_of_word }}</span>
+      </div>
+  </div>
+
+  {% endfor %}
+</div>
+{% else %}
+
+<div class="alert alert-warning" role="alert">
+  There is no word in your dictionary. Please search and add to favorites.
+</div>
+{% endif %}
+<script>
+  $(document).ready(function(){
+      $('[data-toggle="popover"]').popover({
+          placement : 'bottom',
+          trigger: 'hover'
+      });
+  });
+  </script>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}{{title}}{% endblock %}
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{url_for('.static', filename='auth.css')}}">
+<script src="{{url_for('.static', filename='register.js')}}"></script>
+{% endblock %}
+
+{% block content %}
+
+<div class="centered-wrapper">
+  <div class="card border-secondary" style="width:25rem;">
+    <div class="card-body p-4">
+
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <div class="alert alert-danger" role="alert">
+            {{ messages[0] }}. Go to <a href="{{ url_for('auth.login') }}">login page</a>.
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      <form action="" method="post">
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="floatingInput" placeholder="Username" name="username">
+          <label for="floatingInput">Username</label>
+        </div>
+        <div class="form-floating">
+          <input type="password" class="form-control" id="floatingPassword" placeholder="Password" name="password">
+          <label for="floatingPassword">Password</label>
+        </div>
+        <div class="d-grid mt-3">
+          <button type="submit" class="btn btn-lg btn-outline-success" id="submit">SUBMIT</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="card-footer d-flex justify-content-end">
+      <button type="button" class="btn btn-link"><a href="{{ url_for('auth.login') }}">LOGIN</a></button>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}
+

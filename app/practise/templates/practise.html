@@ -1,0 +1,91 @@
+{% extends "private_base.html" %}
+{% block title %}{{title}}{% endblock %}
+{% block head %}
+{{ super() }}
+
+{% endblock %}
+
+{% block content %}
+
+<div class="centered-wrapper">
+  <h4>PRACTISE</h4>
+  {% if count_of_word < 10 %} 
+    <div class="alert alert-warning" role="alert">
+      You must have at least 10 words to practise. You have {{ count_of_word }}.
+    </div>
+  {% else %}
+
+  <div class="card">
+    <div class="card-header">
+      What word does the following definition belong to?
+    </div>
+    <div class="card-body">
+      <span class="fw-bold">Definition :</span>
+
+      {{ definition }}
+
+      <!-- options -->
+      <div class="d-block mt-2">
+        {% for option in options %}
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="answers" id="inlineRadio--{{loop.index}}"
+            value={{option}}>
+          <label class="form-check-label" for="inlineRadio--{{loop.index}}">{{ option }}</label>
+        </div>
+        {% endfor %}
+
+      </div>
+
+    </div>
+    <div class="card-footer">
+      <button class="btn btn-primary" type="button" id="btn_submit">Submit</button>
+      <button class="btn btn-secondary" type="button" id="btn_next">Next</button>
+    </div>
+  </div>  
+  
+  <script>
+    $(document).ready(function () {
+      let definition_id = "{{definition.id}}";
+      let btn_submit = document.getElementById("btn_submit");
+  
+      btn_submit.addEventListener("click", (e) => {
+        let is_checked = $('input[name=answers]').is(':checked');
+        if (is_checked) {
+          let selected_word =  $('input[name=answers]:checked').val();
+          let other_answers = [];
+          $('input[name=answers]:not(:checked)').each(function(){
+            other_answers.push(this.value)
+          })
+
+          console.log(other_answers)
+          $.ajax({
+            type: "POST",
+            url: "/practise/check",
+            data: {
+              definition_id: definition_id,
+              selected_word: selected_word,
+              other_answers: other_answers,
+            },
+            success: (response) => {
+              alertify.success(response.message);
+            },
+            error: (err) => {
+              alertify.error(err.responseJSON.message);
+            }
+          });
+        } else {
+          alertify.warning("Please select one");
+        }
+      });
+      let btn_next = document.getElementById("btn_next");
+      btn_next.addEventListener("click", () => {
+        location.reload();
+      })
+  
+    });
+  </script>
+
+  {% endif %}
+
+</div>
+{% endblock %}
