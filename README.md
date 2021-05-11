@@ -18,3 +18,4 @@ pip install requirements.txt
 python run.py
 
 ```
+> Note: `Please add your WordApi key to config file (config.py)
