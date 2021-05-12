@@ -58,7 +58,10 @@ def add():
 @word_module.route("/delete/<int:id>", methods=['GET'])
 @login_required
 def delete(id):
-  pass
+  Word.query.filter_by(id=id).delete()
+  db.session.commit()
+  return jsonify(success=True, status_code=200, ContentType="application/json"), 200
+
 
 @login_required
 def get_all_definitions():
