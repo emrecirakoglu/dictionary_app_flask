@@ -58,9 +58,17 @@ def add():
 @word_module.route("/delete/<int:id>", methods=['GET'])
 @login_required
 def delete(id):
-  Word.query.filter_by(id=id).delete()
-  db.session.commit()
-  return jsonify(success=True, status_code=200, ContentType="application/json"), 200
+  """
+  Delete a word by id if exist
+  """
+  word = Word.query.filter_by(id=id)
+  if word:
+    word.delete()
+    db.session.commit()
+    return jsonify(success=True, status_code=200, ContentType="application/json"), 200
+  else:
+    return jsonify(success=False, status_code=404, ContentType="application/json"), 200
+
 
 
 @login_required
